@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  metatrader5:
+    image: gmag11/metatrader5_vnc:latest
+    user: "1000:1000"
+    ports:
+      - "${VNC_PORT:-5900}:5900"
+    environment:
+      - TZ=${TIMEZONE:-UTC}
+      - VNC_PASSWORD=${VNC_PASSWORD:-}
+      - MT5_LOGIN=${MT5_LOGIN:-}
+      - MT5_PASSWORD=${MT5_PASSWORD:-}
+      - MT5_SERVER=${MT5_SERVER:-}
+      - MT5_PARAMS=${MT5_PARAMS:-}
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - ${MT5_DATA_PATH:-./mt5_data}:/home/wineuser/.wine/drive_c/Program Files/MetaTrader 5/MQL5
+      - config:/home/wineuser/.wine/drive_c/Program Files/MetaTrader 5
+    networks:
+      - mt5_network
+
+networks:
+  mt5_network:
+    driver: bridge
+
+volumes:
+  config:
